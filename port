@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mohamed Asif — Cybersecurity Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #060a0f;
+      --surface: #0d1117;
+      --border: #1a2332;
+      --accent: #00e5ff;
+      --accent2: #7b2fff;
+      --text: #c9d1d9;
+      --muted: #8b949e;
+      --white: #f0f6fc;
+      --danger: #ff4757;
+      --success: #00e096;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── NOISE & GRID ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: 0.5;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none; z-index: 0; opacity: 0.4;
+    }
+
+    .blob { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; opacity: 0.12; }
+    .blob-1 { width: 500px; height: 500px; background: var(--accent); top: -100px; left: -100px; }
+    .blob-2 { width: 400px; height: 400px; background: var(--accent2); bottom: -100px; right: -100px; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      border-bottom: 1px solid var(--border); backdrop-filter: blur(16px);
+      background: rgba(6,10,15,0.8);
+    }
+    .nav-inner { max-width: 900px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: 'Share Tech Mono', monospace; color: var(--accent); font-size: 14px; letter-spacing: 2px; text-decoration: none; }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--muted); text-decoration: none; letter-spacing: 1px; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ─── HERO & PROFILE IMAGE ─── */
+    .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 100px; padding-bottom: 60px; }
+    .hero-content { max-width: 700px; }
+    
+    .hero-image-container {
+      width: 100%;
+      display: flex;
+      margin-bottom: 25px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-image-container img {
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+    }
+
+    .status-bar { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--muted); display: flex; gap: 20px; align-items: center; margin-bottom: 32px; flex-wrap: wrap; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); animation: pulse 2s infinite; display: inline-block; margin-right: 6px; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    .hero-tag { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--accent); letter-spacing: 3px; margin-bottom: 20px; display: block; animation: fadeUp 0.6s ease both; }
+    .hero-name { font-size: clamp(42px, 8vw, 72px); font-weight: 600; color: var(--white); line-height: 1.05; margin-bottom: 16px; animation: fadeUp 0.6s ease 0.1s both; }
+    .hero-name span { background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-role { font-family: 'Share Tech Mono', monospace; font-size: 16px; color: var(--muted); margin-bottom: 24px; animation: fadeUp 0.6s ease 0.2s both; }
+    .hero-desc { font-size: 16px; color: var(--text); max-width: 560px; margin-bottom: 40px; animation: fadeUp 0.6s ease 0.3s both; }
+    
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; animation: fadeUp 0.6s ease 0.4s both; }
+    .btn { font-family: 'Share Tech Mono', monospace; font-size: 13px; letter-spacing: 1px; padding: 12px 28px; border-radius: 4px; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; display: inline-block; }
+    .btn-primary { background: var(--accent); color: var(--bg); font-weight: 700; }
+    .btn-primary:hover { background: #fff; box-shadow: 0 0 20px rgba(0,229,255,0.4); }
+    .btn-outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+    .btn-outline:hover { background: rgba(0,229,255,0.07); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 100px 0; }
+    .section-label { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 3px; margin-bottom: 12px; }
+    .section-title { font-size: 32px; font-weight: 600; color: var(--white); margin-bottom: 48px; }
+
+    /* ─── ABOUT ─── */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
+    .about-text { color: var(--text); font-size: 15px; }
+    .about-text p { margin-bottom: 16px; }
+
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-content: start; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: center; }
+    .stat-num { font-family: 'Share Tech Mono', monospace; font-size: 28px; color: var(--accent); display: block; }
+    .stat-label { font-size: 12px; color: var(--muted); }
+
+    /* ─── EXPERIENCE ─── */
+    .timeline { position: relative; padding-left: 24px; }
+    .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(to bottom, var(--accent), var(--accent2)); }
+    .timeline-item { margin-bottom: 48px; position: relative; }
+    .timeline-item::before { content: ''; position: absolute; left: -29px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+    .timeline-date { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 2px; margin-bottom: 6px; }
+    .timeline-role { font-size: 18px; font-weight: 600; color: var(--white); margin-bottom: 2px; }
+    .timeline-company { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+    .timeline-list { list-style: none; }
+    .timeline-list li { padding: 6px 0; color: var(--text); font-size: 14px; padding-left: 16px; position: relative; }
+    .timeline-list li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); }
+
+    /* ─── PROJECTS ─── */
+    .project-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 32px; transition: all 0.3s; position: relative; overflow: hidden; }
+    .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .project-card:hover { border-color: rgba(0,229,255,0.3); transform: translateY(-4px); }
+    .project-title { font-size: 20px; font-weight: 600; color: var(--white); margin-bottom: 8px; }
+    .project-desc { color: var(--text); font-size: 14px; margin-bottom: 20px; }
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag { font-family: 'Share Tech Mono', monospace; font-size: 11px; padding: 4px 10px; border-radius: 4px; background: rgba(0,229,255,0.08); color: var(--accent); border: 1px solid rgba(0,229,255,0.2); }
+
+    /* ─── SKILLS ─── */
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+    .skill-group { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 24px; }
+    .skill-group-title { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 2px; margin-bottom: 16px; }
+    .skill-list { list-style: none; }
+    .skill-list li { font-size: 13px; color: var(--text); padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; align-items: center; gap: 8px; }
+    .skill-list li::before { content: '//'; color: var(--muted); font-family: 'Share Tech Mono', monospace; font-size: 10px; }
+
+    /* ─── CERTIFICATIONS ─── */
+    .cert-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 24px; display: flex; align-items: center; gap: 20px; }
+    .cert-icon { width: 48px; height: 48px; border-radius: 8px; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .cert-name { font-size: 16px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+    .cert-issuer { font-size: 13px; color: var(--muted); }
+
+    /* ─── CONTACT ─── */
+    .contact-wrapper { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 48px; text-align: center; position: relative; overflow: hidden; }
+    .contact-wrapper::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 0, rgba(0,229,255,0.06), transparent 60%); }
+    .contact-title { font-size: 28px; font-weight: 600; color: var(--white); margin-bottom: 12px; }
+    .contact-sub { color: var(--muted); font-size: 15px; margin-bottom: 32px; }
+    .contact-links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--muted); position: relative; z-index: 1; }
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0; }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">ASIF_SEC</a>
+      <div class="nav-links">
+        <a href="#about">ABOUT</a>
+        <a href="#experience">EXPERIENCE</a>
+        <a href="#projects">PROJECTS</a>
+        <a href="#skills">SKILLS</a>
+        <a href="#contact">CONTACT</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="status-bar">
+          <span><span class="status-dot"></span>AVAILABLE FOR OPPORTUNITIES</span>
+          <span>// CHENNAI, INDIA</span>
+          <span>// SOC ANALYST TRACK</span>
+        </div>
+
+        <div class="hero-image-container">
+          <img src="profile.jpeg" alt="Mohamed Asif">
+        </div>
+
+        <span class="hero-tag">CYBERSECURITY PROFESSIONAL</span>
+        <h1 class="hero-name">Mohamed<br/><span>Asif</span></h1>
+        <p class="hero-role">SOC Analyst · Threat Detection · Incident Response</p>
+        <p class="hero-desc">
+          Final-year Cybersecurity student with hands-on experience in security operations, log analysis, and threat monitoring. 
+          Built real-world systems — from honeypots to AD security monitoring.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-primary">GET IN TOUCH</a>
+          <a href="https://www.linkedin.com/in/asifcybersecurity" target="_blank" class="btn btn-outline">LINKEDIN</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="about">
+    <div class="container">
+      <div class="section-label">// ABOUT</div>
+      <div class="section-title">Who I Am</div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>I'm a final-year B.Tech Cybersecurity student at B.S. Abdur Rahaman Crescent Institute, building a career in Security Operations. My focus is on Tier 1/2 SOC roles.</p>
+          <p>I've completed two international internships in Dubai, working with real security infrastructure. I don't just study security — I build it.</p>
+          <p>Currently preparing for the EC-Council CSA exam and actively seeking SOC Analyst opportunities.</p>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card"><span class="stat-num">2</span><span class="stat-label">Internships</span></div>
+          <div class="stat-card"><span class="stat-num">1</span><span class="stat-label">Major Project</span></div>
+          <div class="stat-card"><span class="stat-num">6+</span><span class="stat-label">Sec Tools</span></div>
+          <div class="stat-card"><span class="stat-num">2026</span><span class="stat-label">Graduating</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="experience">
+    <div class="container">
+      <div class="section-label">// EXPERIENCE</div>
+      <div class="section-title">Where I've Worked</div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">JUN 2025 – JUL 2025</div>
+          <div class="timeline-role">Cybersecurity & Data Analyst Intern</div>
+          <div class="timeline-company">Cypher Cloud — Dubai, UAE</div>
+          <ul class="timeline-list">
+            <li>Monitored security logs to detect suspicious activities and potential threats.</li>
+            <li>Assisted in vulnerability assessments and basic incident response.</li>
+          </ul>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">JUN 2024 – JUL 2024</div>
+          <div class="timeline-role">IT Security Support Intern</div>
+          <div class="timeline-company">Sparkle Solutionz — Dubai, UAE</div>
+          <ul class="timeline-list">
+            <li>Supported iPad deployment via Apple School Manager and Lightspeed MDM.</li>
+            <li>Assisted with policy enforcement and network troubleshooting.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="projects">
+    <div class="container">
+      <div class="section-label">// PROJECTS</div>
+      <div class="section-title">What I've Built</div>
+      <div class="project-card">
+        <div class="project-title">Web-Based Honeypot System</div>
+        <div class="project-desc">Built a production-grade honeypot to monitor HTTP requests and capture attacker behavior — collecting IP addresses, headers, and request patterns. Features automated malicious IP blocking and a real-time admin monitoring dashboard.</div>
+        <div class="tech-tags">
+          <span class="tag">Next.js</span><span class="tag">Node.js</span><span class="tag">MongoDB</span><span class="tag">REST API</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="skills">
+    <div class="container">
+      <div class="section-label">// SKILLS</div>
+      <div class="section-title">Technical Arsenal</div>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <div class="skill-group-title">SECURITY TOOLS</div>
+          <ul class="skill-list"><li>Splunk</li><li>Wazuh</li><li>Burp Suite</li><li>Wireshark</li></ul>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-title">NETWORKING</div>
+          <ul class="skill-list"><li>TCP/IP</li><li>Firewalls</li><li>IDS / IPS</li><li>SIEM Analysis</li></ul>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-title">OS & LANGUAGES</div>
+          <ul class="skill-list"><li>Kali Linux</li><li>Python</li><li>JavaScript</li><li>Node.js</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="certs">
+    <div class="container">
+      <div class="section-label">// CERTIFICATIONS</div>
+      <div class="section-title">Credentials</div>
+      <div class="cert-card">
+        <div class="cert-icon">🛡️</div>
+        <div>
+          <div class="cert-name">Certified IT Infrastructure & Cyber SOC Analyst</div>
+          <div class="cert-issuer">Red Team Hacker Academy</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="contact">
+    <div class="container">
+      <div class="contact-wrapper">
+        <div class="section-label" style="margin-bottom:16px;">// CONTACT</div>
+        <div class="contact-title">Let's Connect</div>
+        <div class="contact-sub">Open to SOC Analyst roles and cybersecurity collaborations.</div>
+        <div class="contact-links">
+          <a href="mailto:asifgreat17@gmail.com" class="btn btn-primary">EMAIL ME</a>
+          <a href="https://www.linkedin.com/in/asifcybersecurity" target="_blank" class="btn btn-outline">LINKEDIN</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>MOHAMED ASIF // CYBERSECURITY PORTFOLIO // 2026</span>
+  </footer>
+
+</body>
+</html>
